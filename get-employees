@@ -1,0 +1,15 @@
+#!/bin/sh
+
+FILE_NAME="employees_db-full-1.0.6"
+TAR_FILE="${FILE_NAME}.tar"
+BZ_FILE="${TAR_FILE}.bz2"
+DATASET_URL="https://launchpad.net/test-db/employees-db-1/1.0.6/+download/${BZ_FILE}"
+PWD=$(pwd)
+
+sudo apt update
+sudo apt install -y wget
+sudo apt install -y bzip2
+
+wget ${DATASET_URL}
+bzip2 -d ${BZ_FILE}
+tar xvf ${TAR_FILE}

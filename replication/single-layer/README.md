@@ -62,4 +62,4 @@ mysql> show slave status\G
 ```
 mysql> stop slave;
 ```
-이후 #3, #4 재수행
+이후 #1, #3, #4 재수행

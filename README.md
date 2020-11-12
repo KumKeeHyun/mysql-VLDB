@@ -4,6 +4,12 @@ using MySQL VLDB(Very Large DataBase)
 - Partitioning
 - Sharding
 
+## data-set
+using launchpad-test-db-employees
+```
+$ sh get-employees
+```
+
 ## Replication
 
 ## Partitioning
