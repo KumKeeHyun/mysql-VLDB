@@ -1,44 +1,53 @@
 version: '3.2'
 
 services: 
-    mysql-master:
+    master:
         image: mysql:5.6
+        container_name: master
         restart: always
         environment: 
             MYSQL_ROOT_PASSWORD: ssu
         ports: 
             - 3306:3306
         volumes:
-            - ./mysql-repl/master/data:/var/lib/mysql
-            - ./mysql-repl/master/conf:/etc/mysql/conf.d
-            - ./mysql-repl/source-set:/source-set
+            - ./repl-data/master/data:/var/lib/mysql
+            - ./repl-data/master/conf:/etc/mysql/conf.d
+            # TODO : add 'employees_db' for example
         networks:
             static-network:
                 ipv4_address: 172.20.0.2
-    mysql-slave1:
+    slave1:
         image: mysql:5.6
+        container_name: slave1
         restart: always
         environment: 
             MYSQL_ROOT_PASSWORD: ssu
         ports: 
             - 3307:3306
         volumes:
-            - ./mysql-repl/slave1/data:/var/lib/mysql
-            - ./mysql-repl/slave1/conf:/etc/mysql/conf.d
+            - ./repl-data/slave1/data:/var/lib/mysql
+            - ./repl-data/slave1/conf:/etc/mysql/conf.d
         depends_on:
-            - mysql-master
-    mysql-slave2:
+            - master
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.3
+    slave2:
         image: mysql:5.6
+        container_name: slave2
         restart: always
         environment: 
             MYSQL_ROOT_PASSWORD: ssu
         ports: 
             - 3308:3306
         volumes:
-            - ./mysql-repl/slave2/data:/var/lib/mysql
-            - ./mysql-repl/slave2/conf:/etc/mysql/conf.d
+            - ./repl-data/slave2/data:/var/lib/mysql
+            - ./repl-data/slave2/conf:/etc/mysql/conf.d
         depends_on:
-            - mysql-master
+            - master
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.4
 networks:
     static-network:
         ipam:

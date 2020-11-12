@@ -11,7 +11,7 @@ services:
             - 3306:3306
         volumes:
             - ./shard-data/spider/data:/var/lib/mysql
-            - ../employees_db:/source
+            # TODO : add 'employees_db' for example (../employees_db:/source)
         networks:
             static-network:
                 ipv4_address: 172.20.0.2
