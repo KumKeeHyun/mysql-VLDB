@@ -1,11 +1,11 @@
 # MySQL VLDB
 using MySQL VLDB(Very Large DataBase)
 - Replication
-- Partition
-- Shard
+- Partitioning
+- Sharding
 
 ## Replication
 
-## Partition
+## Partitioning
 
-## Shard
+## Sharding
