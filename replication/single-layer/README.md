@@ -18,9 +18,9 @@ server-id=$(id)
 
 ### slave
 ```
- [mysqld]
- server-id=$(id)
- read_only=1
+[mysqld]
+server-id=$(id)
+read_only=1
 ```
 
 ### check server-id
@@ -28,6 +28,7 @@ server-id=$(id)
 mysql> select @@server_id;
 ```
 
+# Run
 ## master
 #### 1. Check binary-log info
 ```

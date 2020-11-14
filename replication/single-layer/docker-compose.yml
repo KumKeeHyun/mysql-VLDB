@@ -12,7 +12,7 @@ services:
         volumes:
             - ./repl-data/master/data:/var/lib/mysql
             - ./repl-data/master/conf:/etc/mysql/conf.d
-            # TODO : add 'employees_db' for example
+            - ../../employees_db:/data-set
         networks:
             static-network:
                 ipv4_address: 172.20.0.2

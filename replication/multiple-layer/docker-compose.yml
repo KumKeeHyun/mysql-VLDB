@@ -1,2 +1,55 @@
 version: '3.2'
-# not yet
+
+services: 
+    first:
+        image: mysql:5.6
+        container_name: first
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: ssu
+        ports: 
+            - 3306:3306
+        volumes:
+            - ./repl-data/first/data:/var/lib/mysql
+            - ./repl-data/first/conf:/etc/mysql/conf.d
+            - ../../employees_db:/data-set
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.2
+    second:
+        image: mysql:5.6
+        container_name: second
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: ssu
+        ports: 
+            - 3307:3306
+        volumes:
+            - ./repl-data/second/data:/var/lib/mysql
+            - ./repl-data/second/conf:/etc/mysql/conf.d
+        depends_on:
+            - first
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.3
+    third:
+        image: mysql:5.6
+        container_name: third
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: ssu
+        ports: 
+            - 3308:3306
+        volumes:
+            - ./repl-data/third/data:/var/lib/mysql
+            - ./repl-data/third/conf:/etc/mysql/conf.d
+        depends_on:
+            - second
+        networks:
+            static-network:
+                ipv4_address: 172.20.0.4
+networks:
+    static-network:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16

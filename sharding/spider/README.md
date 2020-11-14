@@ -6,6 +6,7 @@ Spider only support mariadb... so using image mariadb:10.1 not mysql
 - shard1
 - shard2
 
+# Run
 ## spider
 #### 1. Install spider plug-in
 ```
