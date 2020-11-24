@@ -84,3 +84,83 @@ MySQL 은 기본적으로 비동기 복제 방식으로 작동
 
 ### construction
 ![image](https://user-images.githubusercontent.com/44857109/100520657-34045080-31e2-11eb-9669-93271fa2b95f.png)
+
+## High Availability
+서비스가 장애가 발생하더라도 계속 운영할 수 있도록 만드는 기술
+
+- 복제 슬레이브가 죽는다면
+    - 새로운 슬레이브를 생성하고 복제를 다시 설정하면 끝
+- 복제 마스터가 죽는다면
+    - 슬레이브 중에 하나를 마스터로 변경하고 다른 슬레이브들은 마스터의 주소를 변경하여 다시 복제를 진행
+
+- - -
+
+### Active Standby
+- 마스터가 될 후보중 2개의 노드를 선정
+- Active 마스터가 장애가 발생하면 Standby 를 마스터로 변경, 이후 새로운 Standby 선정
+
+### Active Active
+- 두 개 이상의 Active 노드 구성 허용
+- 하나의 Active 노드의 장애가 발생해도 다른 Active 노드로 서비스
+- Active 노드들끼리 의견이 다르다면 합의가 필요
+    - Active 노드를 홀수로 구성 (3, 5, 7)
+    - MySQL 에 Group Replication(마스터를 여러개 제어하는 기능, 합의와 비슷)가 있지만 Active-Active 구성이라 하기엔 부족함
+
+- - -
+
+### Solution
+- MMM(MySQL Multi-master Replication Manager)
+    - Active-Standby
+    - Active 의 장애를 MMM Manager가 감지하고 Standby 를 Master 로 변경하는 기술
+    - MMM Manager는 이중화 불가능
+- MHA(MySQL HA)
+- Group Replication
+    - 마스터의 의견이 과반 수 이상일 경우 반영
+- Galera Cluster
+    - 모든 노드에 read/write 가능
+
+## Backup
+- 논리백업 vs. 물리백업
+    - 논리백업
+        - SQL 쿼리의 형태로 복사
+        - 전체백업/부분백억/증분백업
+    - 물리백업
+        - 데이터를 가진 물리파일을 직접 복사
+        - 전체백업이 기본
+        - 논리백업보다 빠름
+- 핫백업 vs. 콜드백업
+    - 핫백업
+        - 서비스를 동장하면서 백업
+    - 콜드백업
+        - 서버를 정지시키고 백업
+
+### Dump(mysqldump)
+- 논리백업
+- 전체백업
+- 글로벌락
+```
+// DBMS 전체 백업
+$ mysqldump -uroot -p --all-databases > dump.sql
+
+// employees database 백업
+$ mysqldump -uroot -p employees > employees_db.sql
+
+// employees table 백업
+$ mysqldump -uroot -p employees employees > employees_table.sql
+```
+
+```
+$ mysql -uroot -p < dump.sql
+
+mysql> source dump.sql;
+```
+
+### EnterpriseBackup
+- 유료버전
+- 전체/증분/압축 백업
+- 서비스 동작도중에도 백업 가능
+
+### XtraBackup
+- 무료이면서 성능이 좋음
+### mariabackup
+- mariadb:10.3 부터 Redo Log 포맷 변경으로 사용 권장
